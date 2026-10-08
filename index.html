@@ -261,7 +261,8 @@ footer b{font-weight:400;color:var(--gold)}
 </script>
 <script>
 (function(){
-  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var suave = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var K = suave ? 0.5 : 1;
   var cv=document.getElementById("petalas"); if(!cv) return;
   var cx=cv.getContext("2d"), W=0, H=0, P=[];
   var COLORES=["255,238,222","248,208,198","240,216,172","255,250,240"];
@@ -269,7 +270,7 @@ footer b{font-weight:400;color:var(--gold)}
     var dpr=Math.min(window.devicePixelRatio||1,2);
     W=window.innerWidth; H=window.innerHeight;
     cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0);
-    var n=Math.max(16,Math.min(34,Math.round(W/18)));
+    var n=Math.round(Math.max(16,Math.min(34,Math.round(W/18)))*(suave?0.6:1));
     while(P.length<n) P.push(nueva(true));
     P.length=n;
   }
@@ -279,7 +280,7 @@ footer b{font-weight:400;color:var(--gold)}
       s:5+Math.random()*7, vy:.3+Math.random()*.5,
       sw:.3+Math.random()*.7, ph:Math.random()*6.28,
       r:Math.random()*6.28, vr:(Math.random()-.5)*.02,
-      a:.16+Math.random()*.26,
+      a:.24+Math.random()*.30,
       c:COLORES[Math.floor(Math.random()*COLORES.length)]
     };
   }
@@ -298,7 +299,7 @@ footer b{font-weight:400;color:var(--gold)}
     cx.clearRect(0,0,W,H);
     for(var i=0;i<P.length;i++){
       var p=P[i];
-      p.ph+=.012; p.y+=p.vy; p.x+=Math.sin(p.ph)*p.sw; p.r+=p.vr;
+      p.ph+=.012*K; p.y+=p.vy*K; p.x+=Math.sin(p.ph)*p.sw*K; p.r+=p.vr*K;
       if(p.y>H+24||p.x<-40||p.x>W+40) P[i]=nueva(false);
       dibujar(p);
     }
